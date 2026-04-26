@@ -1,0 +1,127 @@
+services:
+  # ============================================================
+  # PostgreSQL 15 — base de données partagée
+  # ============================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: pfa-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./jade-backend/db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [pfa-net]
+
+  # ============================================================
+  # ml-api — microservice Flask (XGBoost + IsolationForest)
+  # ============================================================
+  ml-api:
+    build:
+      context: ./ml-api
+      dockerfile: Dockerfile
+    container_name: pfa-ml-api
+    restart: unless-stopped
+    environment:
+      MODELS_DIR: /app/models
+      LOG_LEVEL: ${LOG_LEVEL}
+      PORT: 5000
+    volumes:
+      - ./ml-api/models:/app/models
+      - ./ml-api/data:/app/data:ro
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://localhost:5000/health').status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks: [pfa-net]
+
+  # ============================================================
+  # jade-backend — plateforme JADE + WebSocket
+  # ============================================================
+  jade-backend:
+    build:
+      context: ./jade-backend
+      dockerfile: Dockerfile
+    container_name: pfa-jade-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ml-api:
+        condition: service_started
+    environment:
+      JADE_HOST: jade-backend
+      JADE_PORT: 1099
+      JADE_GUI: ${JADE_GUI}
+      LOG_LEVEL: ${LOG_LEVEL}
+      ML_API_URL: ${ML_API_URL}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HIBERNATE_DDL_AUTO: validate
+    ports:
+      - "1099:1099"  # JADE platform (RMI) — utilisé par le simulateur
+      - "8080:8080"  # WebSocket /alertes
+    networks: [pfa-net]
+
+  # ============================================================
+  # simulation — container JADE secondaire (générateur de flux)
+  # ============================================================
+  simulation:
+    build:
+      context: ./simulation
+      dockerfile: Dockerfile
+    container_name: pfa-simulation
+    restart: unless-stopped
+    depends_on:
+      - jade-backend
+    environment:
+      JADE_HOST: jade-backend
+      JADE_PORT: 1099
+      SIM_RATE: ${SIM_RATE}
+      SIM_FRAUD_RATE: ${SIM_FRAUD_RATE}
+    networks: [pfa-net]
+
+  # ============================================================
+  # frontend — dashboard React (servi par Nginx)
+  # ============================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_WS_URL: ${VITE_WS_URL}
+    container_name: pfa-frontend
+    restart: unless-stopped
+    depends_on:
+      - jade-backend
+    ports:
+      - "3000:3000"
+    networks: [pfa-net]
+
+# ============================================================
+# Volumes & networks
+# ============================================================
+volumes:
+  postgres_data:
+    name: pfa_postgres_data
+
+networks:
+  pfa-net:
+    driver: bridge
+    name: pfa-net

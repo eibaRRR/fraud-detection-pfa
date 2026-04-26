@@ -1,0 +1,56 @@
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+.mvn/wrapper/maven-wrapper.jar
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- Modèles ML (volumineux, regénérables) ---
+ml-api/models/*.pkl
+ml-api/models/metrics.json
+ml-api/data/*.csv
+
+# --- Node / Vite ---
+node_modules/
+frontend/dist/
+.eslintcache
+
+# --- IDE ---
+.idea/
+.vscode/
+*.iml
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Env / secrets ---
+.env
+*.local
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- LaTeX build artifacts ---
+rapport/*.aux
+rapport/*.bbl
+rapport/*.bcf
+rapport/*.blg
+rapport/*.fdb_latexmk
+rapport/*.fls
+rapport/*.lof
+rapport/*.log
+rapport/*.lot
+rapport/*.out
+rapport/*.run.xml
+rapport/*.synctex.gz
+rapport/*.toc
+rapport/_minted-*

@@ -1,0 +1,1815 @@
+% =============================================================================
+%  Rapport de Projet de Fin d'Annee (PFA)
+%  Detection intelligente des fraudes dans les systemes financiers et bancaires
+%  basee sur l'integration de l'IA et des Systemes Multi-Agents
+% =============================================================================
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ---------------------------- PACKAGES ---------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,shadows,matrix,fit}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{statistics}
+\usepackage{float}
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+
+% ---------------------------- COULEURS ---------------------------------------
+\definecolor{pfaBlue}{RGB}{30,90,160}
+\definecolor{pfaDark}{RGB}{20,40,80}
+\definecolor{pfaGray}{RGB}{120,120,120}
+\definecolor{codeBg}{RGB}{248,248,248}
+\definecolor{codeKey}{RGB}{0,90,180}
+\definecolor{codeStr}{RGB}{160,40,40}
+\definecolor{codeCmt}{RGB}{80,140,80}
+
+% ---------------------------- HYPERREF ---------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=pfaDark,
+  urlcolor=pfaBlue,
+  citecolor=pfaBlue,
+  pdftitle={Detection intelligente de fraudes - PFA},
+  pdfauthor={Equipe PFA}
+}
+
+% ---------------------------- STYLES TITRES ----------------------------------
+\titleformat{\chapter}[display]
+  {\normalfont\Huge\bfseries\color{pfaDark}}
+  {\filleft\Large Chapitre~\thechapter}
+  {1ex}
+  {\titlerule\vspace{1ex}\filright}
+  [\vspace{1ex}\titlerule]
+
+\titleformat{\section}{\Large\bfseries\color{pfaDark}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{pfaBlue}}{\thesubsection}{1em}{}
+
+% ---------------------------- ENTETES ----------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape\leftmark}
+\fancyhead[R]{\small PFA $\bullet$ Detection de fraude}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------------------------- LISTINGS ---------------------------------------
+\lstdefinestyle{codeStyle}{
+  backgroundcolor=\color{codeBg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeKey}\bfseries,
+  stringstyle=\color{codeStr},
+  commentstyle=\color{codeCmt}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{pfaGray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{pfaGray!40},
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b,
+  xleftmargin=12pt,
+  framexleftmargin=10pt,
+}
+\lstset{style=codeStyle}
+
+% ---------------------------- BIBLIOGRAPHIE ----------------------------------
+\addbibresource{references.bib}
+
+% ============================================================================
+\begin{document}
+% ============================================================================
+
+% ----------------------------- PAGE DE GARDE --------------------------------
+\begin{titlepage}
+  \centering
+  \vspace*{1cm}
+
+  {\large\bfseries Universite [Nom de l'Universite]\par}
+  {\large Faculte des Sciences \\ Departement d'Informatique\par}
+  \vspace{0.6cm}
+
+  \rule{\linewidth}{0.6pt}\\[0.4cm]
+  {\Huge\bfseries\color{pfaDark} Detection intelligente des fraudes\\[0.2cm]
+   dans les systemes financiers et bancaires\par}
+  \vspace{0.4cm}
+  {\Large\itshape basee sur l'integration de l'Intelligence Artificielle\\
+   et des Systemes Multi-Agents\par}
+  \rule{\linewidth}{0.6pt}\\[1cm]
+
+  {\large\bfseries Projet de Fin d'Annee (PFA)\par}
+  {\large Annee universitaire 2025--2026\par}
+  \vspace{1.5cm}
+
+  \begin{flushleft}
+  {\large\bfseries Realise par :} \\[0.2cm]
+  \begin{tabular}{ll}
+    Etudiant 1 & --- Backend SMA JADE \\
+    Etudiant 2 & --- Pipeline Machine Learning \\
+    Etudiant 3 & --- Frontend \& UX \\
+    Etudiant 4 & --- Donnees \& DevOps \\
+  \end{tabular}
+  \end{flushleft}
+  \vspace{1cm}
+  \begin{flushleft}
+  {\large\bfseries Encadre par :} M. / Mme [Nom de l'encadrant]\par
+  \end{flushleft}
+
+  \vfill
+  {\small\itshape Soutenu publiquement le \rule{3cm}{0.3pt}\par}
+\end{titlepage}
+
+% ----------------------------- DEDICACES ------------------------------------
+\chapter*{Dedicaces}
+\addcontentsline{toc}{chapter}{Dedicaces}
+
+\noindent A nos chers parents, qui n'ont jamais cesse de nous soutenir tout au
+long de notre cursus universitaire, et qui ont fait de nous ce que nous sommes
+aujourd'hui. Aucune dedicace ne saurait exprimer notre reconnaissance, notre
+amour, et le profond respect que nous leur portons.
+
+\bigskip
+\noindent A nos freres, soeurs, et tous les membres de nos familles, pour leur
+soutien moral et leurs encouragements constants.
+
+\bigskip
+\noindent A nos amis et camarades de promotion, pour les moments partages, les
+debats enrichissants et l'entraide qui ont marque ces annees d'etudes.
+
+\bigskip
+\noindent A tous nos enseignants, qui ont contribue a notre formation et nous
+ont transmis le gout du savoir et de la rigueur.
+
+\bigskip
+\hfill {\itshape L'equipe PFA}
+
+% ----------------------------- REMERCIEMENTS ---------------------------------
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Au terme de ce travail, il nous est agreable de nous acquitter d'une dette de
+reconnaissance auprès de toutes les personnes dont l'intervention au cours de
+ce projet a favorise son aboutissement.
+
+Nous tenons en premier lieu a exprimer notre sincere gratitude a notre
+encadrant, \textbf{[Nom de l'encadrant]}, pour la qualite de son encadrement,
+sa disponibilite, sa patience, ses conseils avises et ses critiques
+constructives qui nous ont permis de mener a bien ce projet.
+
+Nous remercions egalement l'ensemble du corps professoral du
+\textbf{Departement d'Informatique} de la \textbf{Faculte [...]} pour la qualite
+de l'enseignement dispense durant notre cursus, ainsi que pour leur
+disponibilite et leur ecoute.
+
+Nos remerciements s'adressent enfin aux \textbf{membres du jury} qui nous ont
+fait l'honneur d'evaluer ce travail, et a toute personne ayant contribue, de
+près ou de loin, a la realisation de ce projet.
+
+% ----------------------------- RESUME ---------------------------------------
+\chapter*{Resume}
+\addcontentsline{toc}{chapter}{Resume}
+
+La fraude bancaire represente aujourd'hui un defi majeur pour les institutions
+financieres, avec des pertes mondiales estimees a plusieurs dizaines de
+milliards de dollars par an. Les approches classiques fondees uniquement sur
+des regles statiques ou sur un modele d'apprentissage isole montrent leurs
+limites face a la sophistication croissante des fraudeurs et au volume des
+transactions a traiter en temps reel.
+
+Ce projet de fin d'annee propose une architecture hybride combinant un
+\textbf{systeme multi-agents} (SMA) developpe avec la plateforme \textbf{JADE}
+et un \textbf{pipeline d'intelligence artificielle} reposant sur un
+\emph{ensemble} \textbf{XGBoost} (apprentissage supervise) et
+\textbf{Isolation Forest} (apprentissage non supervise). Six agents autonomes
+collaborent via le standard \textbf{FIPA-ACL} et le protocole
+\emph{FIPA Contract-Net} pour analyser, scorer, evaluer et trancher chaque
+transaction. Trois regles metier (montant, velocite, horaire) viennent enrichir
+le score machine learning afin de produire une decision \emph{explicable}.
+
+Le systeme est integralement conteneurise (\textbf{Docker Compose}) et expose
+ses alertes en temps reel a un \textbf{tableau de bord React} via
+\textbf{WebSocket}. Toutes les decisions sont persistees dans une base
+\textbf{PostgreSQL}. Les modeles ont ete entraines sur le jeu de donnees
+public de Kaggle \emph{Credit Card Fraud Detection} ($284\,807$ transactions,
+$492$ fraudes) et atteignent un \textbf{ROC-AUC d'ensemble de 0,96}.
+
+\noindent\textbf{Mots-cles :} Detection de fraude, Systemes Multi-Agents, JADE,
+FIPA-ACL, Machine Learning, XGBoost, Isolation Forest, Approche hybride,
+Temps reel, WebSocket.
+
+% ----------------------------- ABSTRACT --------------------------------------
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Banking fraud has become one of the most pressing challenges faced by financial
+institutions, with global losses estimated at tens of billions of dollars
+annually. Traditional approaches relying solely on static rules or on a single
+isolated learning model are increasingly inadequate against modern adversaries
+and the sheer volume of real-time transactions.
+
+This Final Year Project proposes a hybrid architecture combining a
+\textbf{Multi-Agent System} (MAS) developed using the \textbf{JADE} platform
+with a \textbf{Machine Learning} pipeline based on an \emph{ensemble} of
+\textbf{XGBoost} (supervised learning) and \textbf{Isolation Forest}
+(unsupervised anomaly detection). Six autonomous agents cooperate through the
+\textbf{FIPA-ACL} standard and the \emph{FIPA Contract-Net} protocol to
+analyse, score, evaluate and decide on each transaction. Three business rules
+(amount, velocity, timing) enrich the ML score to produce an
+\emph{explainable} decision.
+
+The system is fully containerised (\textbf{Docker Compose}) and broadcasts
+real-time alerts to a \textbf{React dashboard} through \textbf{WebSocket}, with
+full persistence in a \textbf{PostgreSQL} database. Models were trained on the
+public Kaggle \emph{Credit Card Fraud Detection} dataset ($284{,}807$
+transactions, $492$ frauds) and achieve a \textbf{ROC-AUC ensemble score of
+0.96}.
+
+\noindent\textbf{Keywords:} Fraud detection, Multi-Agent Systems, JADE,
+FIPA-ACL, Machine Learning, XGBoost, Isolation Forest, Hybrid approach,
+Real-time, WebSocket.
+
+% ----------------------------- TABLE DES MATIERES ----------------------------
+\tableofcontents
+\listoffigures
+\listoftables
+
+% ============================================================================
+%                          INTRODUCTION GENERALE
+% ============================================================================
+\chapter*{Introduction generale}
+\addcontentsline{toc}{chapter}{Introduction generale}
+\markboth{Introduction generale}{}
+
+\section*{Contexte}
+
+La numerisation des services bancaires et l'explosion du commerce electronique
+ont profondement transforme les habitudes de consommation. En contrepartie,
+elles ont ouvert un boulevard a une nouvelle generation de criminalite
+financiere : la fraude bancaire. Selon le rapport \emph{Nilson Report} (2023),
+les pertes mondiales liees a la fraude par carte ont depasse les
+\textbf{32 milliards de dollars} en 2022, avec une projection a plus de
+\textbf{40 milliards en 2027}. Plus encore, ces fraudes sont desormais
+massivement automatisees, perpetrees a l'echelle internationale, et exploitent
+des techniques toujours plus elaborees : \emph{card testing}, \emph{card not
+present}, vol d'identite, ingenierie sociale\dots
+
+Face a ce phenomene, les institutions financieres sont contraintes
+d'industrialiser leur lutte contre la fraude. Or, les systemes legacy --
+souvent fondes sur des batteries de regles statiques ecrites a la main --
+peinent a suivre. D'une part, ils generent un taux excessif de
+\emph{faux positifs} qui irrite les clients legitimes ; d'autre part, ils sont
+incapables de detecter les nouvelles formes de fraude qui n'ont pas encore ete
+caracterisees explicitement.
+
+\section*{Problematique}
+
+L'enjeu de notre projet est de repondre a la question suivante :
+
+\begin{quote}
+\itshape Comment concevoir un systeme de detection de fraude bancaire qui soit
+a la fois \textbf{intelligent} (capable d'apprendre et de detecter des
+patterns nouveaux), \textbf{explicable} (auditable par un humain et conforme
+aux exigences reglementaires), \textbf{distribue} (capable de monter en charge
+sur de gros volumes), et \textbf{temps reel} (decision en quelques
+millisecondes) ?
+\end{quote}
+
+\section*{Objectifs}
+
+Ce travail vise a concevoir et a implementer un prototype operationnel
+combinant deux paradigmes complementaires :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{L'Intelligence Artificielle (IA)} pour apprendre les patterns
+        de fraude a partir de donnees historiques (apprentissage supervise) et
+        detecter des anomalies inedites (apprentissage non supervise).
+  \item \textbf{Les Systemes Multi-Agents (SMA)} pour orchestrer la chaine de
+        decision de maniere distribuee, modulaire, et conforme aux standards
+        FIPA-ACL.
+\end{itemize}
+
+Plus precisement, le systeme doit :
+\begin{enumerate}[leftmargin=*]
+  \item Recevoir un flux continu de transactions bancaires en temps reel ;
+  \item Calculer pour chaque transaction un score de risque combinant un
+        modele ML d'ensemble et un ensemble de regles metier ;
+  \item Trancher chaque transaction en \texttt{APPROUVER}, \texttt{SIGNALER}
+        ou \texttt{BLOQUER} ;
+  \item Persister chaque decision et chaque message ACL pour audit ;
+  \item Diffuser les alertes vers un tableau de bord operationnel en temps
+        reel.
+\end{enumerate}
+
+\section*{Organisation du rapport}
+
+Ce rapport est structure en six chapitres :
+
+\begin{itemize}[leftmargin=*]
+  \item Le \textbf{chapitre 1} presente le contexte general, la problematique
+        de la fraude bancaire et un etat de l'art des techniques de detection.
+  \item Le \textbf{chapitre 2} detaille les concepts theoriques mobilises :
+        Systemes Multi-Agents, FIPA-ACL, plateforme JADE, et algorithmes
+        d'apprentissage automatique utilises (XGBoost, Isolation Forest, SMOTE).
+  \item Le \textbf{chapitre 3} presente les frameworks, langages de
+        programmation et outils selectionnes pour la realisation.
+  \item Le \textbf{chapitre 4} expose la conception du systeme : architecture
+        globale, modele d'agents, modele de donnees, et protocole d'interaction.
+  \item Le \textbf{chapitre 5} decrit l'implementation technique : organisation
+        du code, agents JADE, microservice ML et choix d'ingenierie.
+  \item Le \textbf{chapitre 6} presente les tests, les resultats experimentaux
+        et les captures d'ecran du tableau de bord.
+\end{itemize}
+
+Une \textbf{conclusion generale} dresse le bilan du projet et trace plusieurs
+pistes d'amelioration et de recherche future.
+
+% ============================================================================
+%                          CHAPITRE 1 - CONTEXTE
+% ============================================================================
+\chapter{Contexte general et etat de l'art}
+
+\section{Introduction du chapitre}
+Ce chapitre pose les fondations conceptuelles et factuelles du projet. Apres
+avoir cerne le phenomene de la fraude bancaire, nous passons en revue les
+principales familles d'approches utilisees aujourd'hui pour la detecter, en
+soulignant leurs forces et leurs limites. Cette analyse motive le choix d'une
+architecture hybride combinant IA et SMA.
+
+\section{La fraude bancaire : un phenomene en pleine mutation}
+
+\subsection{Definition et typologie}
+
+La \emph{fraude bancaire} designe toute action illegale visant a obtenir, par
+tromperie, un gain financier au detriment d'un etablissement bancaire ou d'un
+client. On distingue communement :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{La fraude par carte} (CNP, \emph{Card Not Present}, vol
+        physique, skimming, clonage) ;
+  \item \textbf{La fraude par virement} (manipulation du beneficiaire,
+        usurpation d'identite, faux ordre du president) ;
+  \item \textbf{La fraude au paiement instantane} (\emph{authorized push
+        payment}) ;
+  \item \textbf{La cyberfraude} (phishing, malware bancaire, attaques par
+        injection sur l'API).
+\end{itemize}
+
+\subsection{Caracteristiques statistiques}
+
+Les fraudes presentent quelques caracteristiques recurrentes qui guident les
+strategies de detection :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Tres faible prevalence} : moins de 0,2\,\% des transactions
+        sont frauduleuses dans les jeux de donnees publics.
+  \item \textbf{Patterns temporels} : les fraudes par rafale (\emph{burst
+        attack}) tentent de maximiser le gain en quelques minutes avant
+        detection.
+  \item \textbf{Horaires atypiques} : une part importante survient hors
+        heures ouvrees ou la nuit (UTC).
+  \item \textbf{Adaptabilite} : les fraudeurs modifient leurs patterns des
+        qu'une regle est detectee, rendant les systemes purement
+        deterministes obsoletes.
+\end{itemize}
+
+\section{Etat de l'art des techniques de detection}
+
+\subsection{Approches a base de regles (rule-based)}
+
+Historiquement, les premiers systemes anti-fraude se sont appuyes sur des
+batteries de regles ecrites par des experts metier : \emph{si le montant
+depasse X et que le pays est dans la liste Y alors bloquer}. Ces approches
+sont :
+
+\begin{itemize}[leftmargin=*]
+  \item[\(+\)] simples, transparentes et auditables ;
+  \item[\(+\)] rapides a executer et faciles a deployer ;
+  \item[\(-\)] rigides, incapables de detecter de nouvelles formes de fraude ;
+  \item[\(-\)] generatrices d'un taux eleve de faux positifs ;
+  \item[\(-\)] couteuses a maintenir a mesure que les regles s'accumulent.
+\end{itemize}
+
+\subsection{Approches statistiques classiques}
+
+L'analyse statistique (regression logistique, scorecards, analyse
+discriminante) a longtemps constitue le standard en \emph{credit risk}. Elle
+ameliore la rigueur mathematique des regles mais reste limitee face a des
+donnees a forte dimension et a relations non lineaires.
+
+\subsection{Apprentissage automatique supervise}
+
+Avec la disponibilite croissante de donnees etiquetees, les algorithmes
+supervises se sont imposes :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Random Forest} : robuste, peu sensible au parametrage,
+        explicabilite via importance des features ;
+  \item \textbf{Gradient Boosting (XGBoost, LightGBM)} : etat de l'art en
+        precision sur donnees tabulaires, gere nativement le desequilibre via
+        le parametre \texttt{scale\_pos\_weight} ;
+  \item \textbf{Reseaux de neurones} : interessants pour les sequences
+        (LSTM/Transformers) mais moins performants sur des features tabulaires
+        statiques.
+\end{itemize}
+
+\subsection{Apprentissage non supervise et detection d'anomalies}
+
+Pour detecter les fraudes \emph{nouvelles} (jamais vues dans les donnees
+d'entrainement), les methodes non supervisees jouent un role complementaire :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Isolation Forest} : isole les points anormaux au moyen d'arbres
+        aleatoires.
+  \item \textbf{One-Class SVM} : modelise la frontiere des points "normaux".
+  \item \textbf{Autoencoders} : exploitent la reconstruction pour detecter
+        l'anomalie.
+\end{itemize}
+
+\subsection{Approches hybrides}
+
+La litterature recente \cite{west2016intelligent,abakarim2018hybrid} converge
+vers des approches \emph{hybrides} combinant :
+
+\begin{itemize}[leftmargin=*]
+  \item Un modele supervise (XGBoost) pour les fraudes connues ;
+  \item Un detecteur d'anomalies (Isolation Forest) pour les fraudes nouvelles ;
+  \item Des regles metier deterministes pour la conformite reglementaire et
+        l'explicabilite ;
+  \item Une orchestration multi-agents pour la modularite et la
+        distribution.
+\end{itemize}
+
+C'est cette derniere approche hybride que nous avons choisi d'implementer.
+
+\section{Synthese et positionnement}
+
+\begin{table}[H]
+\centering
+\caption{Comparaison des principales approches de detection de fraude}
+\label{tab:comparaison-approches}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l X X X}
+\toprule
+\textbf{Approche} & \textbf{Avantages} & \textbf{Limites} & \textbf{Cas d'usage} \\
+\midrule
+Regles & Simple, explicable & Rigide, faux positifs & Conformite \\
+Statistique & Rigueur math. & Faible avec features non lineaires & Scoring credit \\
+ML supervise & Tres precis & Necessite labels & Fraudes connues \\
+ML non supervise & Detecte nouveau & Faux positifs eleves & Anomalies \\
+SMA & Modulaire, distribue & Complexite & Orchestration \\
+\textbf{Hybride (notre approche)} & \textbf{Combine tous les avantages} & \textbf{Plus complexe} & \textbf{Production} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Conclusion du chapitre}
+Ce chapitre a montre que la lutte contre la fraude bancaire ne peut plus se
+contenter d'une approche unique. La voie hybride combinant IA et SMA,
+plebiscitee par la litterature recente, est celle que nous explorons dans la
+suite de ce rapport.
+
+% ============================================================================
+%                          CHAPITRE 2 - CONCEPTS
+% ============================================================================
+\chapter{Concepts theoriques}
+
+\section{Introduction du chapitre}
+Ce chapitre presente les concepts theoriques mobilises dans notre solution :
+les Systemes Multi-Agents (SMA), le standard FIPA-ACL, la plateforme JADE,
+ainsi que les algorithmes d'apprentissage automatique XGBoost, Isolation
+Forest et la technique de reequilibrage SMOTE.
+
+\section{Les Systemes Multi-Agents (SMA)}
+
+\subsection{Notion d'agent}
+
+Selon la definition de Wooldridge \cite{wooldridge2009introduction}, un
+\textbf{agent} est une entite logicielle situee dans un environnement, capable
+d'agir de maniere autonome pour atteindre ses objectifs. Un agent presente
+typiquement les proprietes suivantes :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Autonomie} : il agit sans intervention humaine directe ;
+  \item \textbf{Reactivite} : il percoit son environnement et reagit aux
+        changements ;
+  \item \textbf{Pro-activite} : il poursuit ses propres buts ;
+  \item \textbf{Sociabilite} : il interagit avec d'autres agents.
+\end{itemize}
+
+\subsection{Systemes Multi-Agents}
+
+Un \textbf{Systeme Multi-Agents} (SMA) est un ensemble d'agents qui cohabitent
+dans un environnement et cooperent (ou se concurrencent) pour atteindre des
+buts individuels et collectifs. Les SMA sont particulierement adaptes a des
+problemes :
+
+\begin{itemize}[leftmargin=*]
+  \item \emph{Distribues} : la connaissance et le controle sont repartis ;
+  \item \emph{Dynamiques} : l'environnement evolue en permanence ;
+  \item \emph{Modulaires} : le systeme se decompose en services
+        independants.
+\end{itemize}
+
+La detection de fraude bancaire en temps reel coche les trois cases.
+
+\subsection{Standard FIPA-ACL}
+
+La \emph{Foundation for Intelligent Physical Agents} (FIPA) a normalise un
+langage de communication entre agents : le \textbf{ACL} (\emph{Agent
+Communication Language}). Un message ACL contient notamment :
+
+\begin{itemize}[leftmargin=*]
+  \item un \textbf{performatif} (intention) tel que \texttt{REQUEST},
+        \texttt{INFORM}, \texttt{PROPOSE}, \texttt{ACCEPT\_PROPOSAL},
+        \texttt{REJECT\_PROPOSAL}, \texttt{REFUSE}, \texttt{FAILURE} ;
+  \item un \textbf{emetteur} et un ou plusieurs \textbf{destinataires} ;
+  \item une \textbf{ontologie} qui definit le vocabulaire metier ;
+  \item un \textbf{contenu} (typiquement du JSON ou du SL) ;
+  \item un \textbf{identifiant de conversation} permettant de correler
+        plusieurs messages.
+\end{itemize}
+
+\subsection{Le protocole FIPA Contract-Net}
+
+Le protocole \emph{Contract-Net} \cite{smith1980contract} est un standard
+FIPA permettant la repartition dynamique de taches. Il repose sur quatre
+phases :
+
+\begin{enumerate}[leftmargin=*]
+  \item Un agent \emph{initiator} envoie un \texttt{CFP} (Call For Proposal) ;
+  \item Les \emph{participants} repondent par un \texttt{PROPOSE} ;
+  \item L'\emph{initiator} accepte ou rejette via \texttt{ACCEPT\_PROPOSAL}
+        ou \texttt{REJECT\_PROPOSAL} ;
+  \item Le participant retenu execute la tache et retourne le resultat
+        (\texttt{INFORM}).
+\end{enumerate}
+
+Dans notre projet, nous utilisons une version legerement adaptee : l'agent
+Risque envoie directement un \texttt{PROPOSE} a l'agent Banque qui repond par
+\texttt{ACCEPT\_PROPOSAL} (fraude confirmee) ou \texttt{REJECT\_PROPOSAL}
+(transaction approuvee).
+
+\subsection{La plateforme JADE}
+
+\textbf{JADE} (\emph{Java Agent DEvelopment framework}) est une plateforme
+open-source developpee par Telecom Italia Lab. Elle implemente fidelement les
+specifications FIPA et fournit :
+
+\begin{itemize}[leftmargin=*]
+  \item Un \textbf{container} (conteneur d'agents) gerant le cycle de vie ;
+  \item Un \textbf{Directory Facilitator (DF)} (sorte d'annuaire jaune) pour
+        la decouverte dynamique d'agents par type de service ;
+  \item Un \textbf{Agent Management System (AMS)} pour la gestion globale ;
+  \item Une API riche de \emph{behaviours} (cyclic, one-shot, ticker, parallel,
+        sequential\dots).
+\end{itemize}
+
+\section{Algorithmes d'apprentissage automatique}
+
+\subsection{XGBoost}
+
+\textbf{XGBoost} (\emph{eXtreme Gradient Boosting}) \cite{chen2016xgboost} est
+une implementation hautement optimisee de l'algorithme de \emph{Gradient
+Boosting Decision Trees}. L'idee centrale est d'entrainer une succession
+d'arbres de decision faibles ou\`u chaque nouvel arbre corrige les erreurs des
+precedents. Mathematiquement, on minimise une fonction objective :
+
+\begin{equation}
+  \mathcal{L}(\phi) = \sum_{i} \ell(\hat{y}_i, y_i) + \sum_{k} \Omega(f_k)
+\end{equation}
+
+ou $\ell$ est une fonction de perte (log-loss en classification binaire) et
+$\Omega(f_k) = \gamma T + \frac{1}{2}\lambda \lVert w \rVert^2$ un terme de
+regularisation sur la complexite de l'arbre $k$.
+
+Pour gerer le desequilibre extreme entre classes, XGBoost permet de definir le
+parametre \texttt{scale\_pos\_weight} qui pondere la classe minoritaire.
+
+\subsection{Isolation Forest}
+
+\textbf{Isolation Forest} \cite{liu2008isolation} est un algorithme non
+supervise de detection d'anomalies. Son principe est simple : un point
+\emph{anormal} est plus facilement \emph{isole} (separe des autres) qu'un
+point \emph{normal}. L'algorithme construit une foret d'arbres aleatoires ou
+chaque noeud divise l'espace selon un attribut et un seuil tires au hasard.
+
+Le \emph{score d'anomalie} est inversement proportionnel a la profondeur
+moyenne a laquelle un point est isole. On le normalise typiquement dans
+$[0, 1]$ ou $1$ signifie tres anormal.
+
+\subsection{SMOTE}
+
+Sur le jeu de donnees Kaggle utilise, seulement $0{,}17\,\%$ des transactions
+sont frauduleuses. Un classifieur naif obtiendrait $99{,}83\,\%$
+d'\emph{accuracy} en predisant \og non-fraude\fg{} pour tout le monde.
+
+Pour pallier ce probleme, nous utilisons \textbf{SMOTE} (\emph{Synthetic
+Minority Over-sampling Technique}) \cite{chawla2002smote}. Cet algorithme
+genere des exemples synthetiques de la classe minoritaire en interpolant
+lineairement entre des voisins proches. Nous reequilibrons a un ratio
+$1{:}10$ (10\,\% de fraudes apres SMOTE) afin de preserver le realisme tout
+en aidant l'apprentissage.
+
+\subsection{Ensemble XGBoost + Isolation Forest}
+
+Les deux modeles sont complementaires :
+
+\begin{itemize}[leftmargin=*]
+  \item \emph{XGBoost} excelle sur les fraudes \og connues \fg{} (deja
+        etiquetees dans le passe) ;
+  \item \emph{Isolation Forest} repere les fraudes \og nouvelles \fg{} qui
+        n'ont jamais ete vues mais s'ecartent statistiquement du normal.
+\end{itemize}
+
+Nous fusionnons les deux scores par une combinaison lineaire :
+
+\begin{equation}
+  \text{score}_{\text{ML}} = \alpha \cdot \text{score}_{\text{XGB}} +
+                              (1 - \alpha) \cdot \text{score}_{\text{IF}}
+  \quad\text{avec}~\alpha = 0{,}65.
+\end{equation}
+
+\section{Conclusion du chapitre}
+Les concepts presentes ici fournissent les briques theoriques de notre
+solution. Le chapitre suivant decrit comment ces briques sont assemblees dans
+une architecture coherente.
+
+% ============================================================================
+%                CHAPITRE 3 - FRAMEWORKS, LANGAGES ET OUTILS
+% ============================================================================
+\chapter{Frameworks, langages et outils utilises}
+
+\section{Introduction du chapitre}
+Avant de detailler la conception, ce chapitre presente l'ensemble des
+langages de programmation, frameworks et outils mobilises dans le projet. Ces
+choix techniques ont ete dictes par trois exigences : la \textbf{maturite} du
+framework (production-ready), sa \textbf{compatibilite} avec les standards
+industriels, et la \textbf{communaute} active qui en assure la perennite.
+
+\section{Langages de programmation}
+
+\subsection{Java 17}
+
+\textbf{Java} est un langage oriente objet, fortement type, compile en
+\emph{bytecode} et execute par la JVM (\emph{Java Virtual Machine}). Il est
+particulierement adapte aux systemes distribues critiques grace a sa
+robustesse, son ecosysteme mature, et sa portabilite (\emph{write once, run
+anywhere}). La version 17 (LTS) apporte des fonctionnalites modernes :
+\emph{records}, \emph{sealed classes}, \emph{pattern matching},
+\emph{switch expressions}\dots
+
+\textbf{Role dans le projet :} implementation des six agents JADE, du serveur
+WebSocket Tyrus, et de la couche de persistance Hibernate.
+
+\subsection{Python 3.11}
+
+\textbf{Python} est un langage interprete, dynamiquement type, plebiscite
+dans la communaute Data Science / Machine Learning grace a son ecosysteme
+extraordinairement riche (NumPy, Pandas, scikit-learn, TensorFlow,
+PyTorch\dots). Sa syntaxe lisible accelere considerablement les iterations
+de prototypage.
+
+\textbf{Role dans le projet :} pipeline de feature engineering, entrainement
+des modeles XGBoost et Isolation Forest, microservice Flask exposant
+l'endpoint \texttt{/predict}.
+
+\subsection{TypeScript 5}
+
+\textbf{TypeScript} est un sur-ensemble de JavaScript ajoutant un systeme de
+typage statique optionnel. Developpe par Microsoft, il s'est impose comme le
+standard de fait pour les applications front-end de taille moyenne ou
+grande, en eliminant a la compilation une grande partie des bugs typiques de
+JavaScript.
+
+\textbf{Role dans le projet :} developpement du tableau de bord React, avec
+typage strict des messages WebSocket et des transitions d'etat Zustand.
+
+\subsection{SQL (PostgreSQL)}
+
+Le langage \textbf{SQL} (\emph{Structured Query Language}) reste le standard
+universel pour l'interrogation des bases de donnees relationnelles. Notre
+implementation utilise les extensions specifiques de PostgreSQL : type
+\texttt{UUID} natif, contraintes \texttt{CHECK}, index sur \texttt{JSONB},
+vues materialisees pour les KPI.
+
+\textbf{Role dans le projet :} script de creation \texttt{init.sql},
+requ\^etes Hibernate, vues d'agregation (\texttt{v\_kpi\_fraude}).
+
+\section{Frameworks et bibliotheques}
+
+\subsection{JADE (Java Agent DEvelopment framework)}
+
+\textbf{JADE} \cite{jade2007programmer} est la plateforme multi-agents de
+reference. Developpee par Telecom Italia Lab depuis 2000 et maintenue sous
+licence LGPL, elle implemente fidelement les specifications FIPA :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Containers} : conteneurs d'agents avec gestion du cycle de
+        vie (creation, demarrage, suspension, arr\^et) ;
+  \item \textbf{Behaviours} : abstraction du comportement d'un agent
+        (CyclicBehaviour, OneShotBehaviour, TickerBehaviour\dots) ;
+  \item \textbf{Directory Facilitator (DF)} : annuaire \emph{pages jaunes}
+        permettant aux agents de s'enregistrer et se decouvrir par type de
+        service ;
+  \item \textbf{Agent Management System (AMS)} : registre des agents et de
+        leur statut ;
+  \item \textbf{Message Transport Protocol} : transport des messages ACL via
+        JICP, avec serialisation Java native.
+\end{itemize}
+
+\subsection{Apache Maven 3.9}
+
+\textbf{Maven} est le gestionnaire de dependances et l'outil de build de
+reference pour les projets Java. Il permet de declarer les dependances dans
+un fichier \texttt{pom.xml} et automatise la compilation, l'execution des
+tests, et la production d'artefacts (JAR, WAR\dots).
+
+\textbf{Role dans le projet :} build du backend JADE et du simulateur, avec
+le plugin \emph{maven-shade-plugin} pour produire des JAR \emph{fat}
+(toutes dependances incluses).
+
+\subsection{Hibernate 6 et JPA}
+
+\textbf{Hibernate} est l'implementation de reference de la specification JPA
+(\emph{Java Persistence API}). Il assure le mapping objet-relationnel
+(\emph{ORM}) : les entites Java annotees \texttt{@Entity} sont
+automatiquement persistees dans des tables SQL.
+
+\textbf{Role dans le projet :} mapping des entites \texttt{Transaction},
+\texttt{Alerte}, \texttt{DecisionAgent}, \texttt{MessageACL}.
+
+\subsection{HikariCP}
+
+\textbf{HikariCP} est le pool de connexions JDBC le plus performant
+disponible (mesure 10\,000$\times$ plus rapide que les alternatives sur
+certains benchmarks). Il gere efficacement la reutilisation des connexions
+PostgreSQL.
+
+\subsection{Tyrus + Grizzly}
+
+\textbf{Tyrus} est l'implementation de reference de la specification
+Jakarta WebSocket. Combine au serveur HTTP \textbf{Grizzly}, il fournit un
+serveur WebSocket complet en quelques lignes de Java :
+
+\begin{lstlisting}[language=Java,caption={Demarrage du serveur Tyrus},label=lst:tyrus]
+Server tyrusServer = new Server("0.0.0.0", 8080, "/", null,
+                                AlerteWebSocketServer.class);
+tyrusServer.start();
+\end{lstlisting}
+
+\subsection{Flask 3}
+
+\textbf{Flask} est un micro-framework web Python ultra-leger. Il fournit
+juste ce qu'il faut pour exposer un endpoint REST sans imposer de structure
+contraignante. Compare a Django, c'est l'outil ideal pour un microservice ML.
+
+\textbf{Role dans le projet :} expose les endpoints \texttt{/predict},
+\texttt{/health}, \texttt{/metrics} de \texttt{ml-api}.
+
+\subsection{XGBoost 2.0}
+
+\textbf{XGBoost} (\emph{eXtreme Gradient Boosting}) \cite{chen2016xgboost}
+est une bibliotheque optimisee pour l'apprentissage par boosting d'arbres
+de decision. Sa popularite est immense en competition Kaggle ou elle a
+remporte des centaines de challenges.
+
+\textbf{Caracteristiques :}
+\begin{itemize}[leftmargin=*]
+  \item Implementation native en C++ avec wrappers Python/R/JVM ;
+  \item Support GPU \texttt{tree\_method=gpu\_hist} ;
+  \item Gestion native des valeurs manquantes ;
+  \item Regularisation L1/L2 integree ;
+  \item Parametre \texttt{scale\_pos\_weight} pour le desequilibre.
+\end{itemize}
+
+\subsection{scikit-learn 1.5}
+
+\textbf{scikit-learn} est la bibliotheque de Machine Learning de reference
+en Python. Elle fournit une API unifiee \texttt{fit/predict} pour des
+dizaines d'algorithmes (SVM, Random Forest, K-Means, PCA\dots).
+
+\textbf{Role dans le projet :} \texttt{IsolationForest},
+\texttt{train\_test\_split}, \texttt{classification\_report},
+\texttt{roc\_auc\_score}, \texttt{confusion\_matrix}.
+
+\subsection{imbalanced-learn (SMOTE)}
+
+\textbf{imbalanced-learn} etend scikit-learn avec des methodes specifiques
+au desequilibre de classes : SMOTE, ADASYN, sous-echantillonnage,
+combinaisons (\emph{SMOTEENN}, \emph{SMOTETomek})\dots
+
+\subsection{React 18 + Vite 5}
+
+\textbf{React} est la bibliotheque front-end developpee par Meta (Facebook).
+Elle repose sur le principe des \emph{composants} et du \emph{Virtual DOM}
+pour optimiser les re-rendus. La version 18 introduit le rendu concurrent
+et les transitions automatiques.
+
+\textbf{Vite} est un build-tool moderne base sur ESBuild + Rollup, beaucoup
+plus rapide que Webpack pour le \emph{hot module replacement}.
+
+\subsection{TailwindCSS 3}
+
+\textbf{TailwindCSS} est un framework CSS \emph{utility-first} qui permet
+de styler directement dans le balisage HTML/JSX :
+
+\begin{lstlisting}[language=html,caption={Exemple Tailwind},label=lst:tailwind]
+<div class="bg-slate-900 text-white p-4 rounded-lg shadow-lg">
+  <h2 class="text-xl font-bold">Total transactions</h2>
+</div>
+\end{lstlisting}
+
+\subsection{Recharts 2}
+
+\textbf{Recharts} est une bibliotheque de graphiques React fondee sur D3.js.
+Elle expose des composants declaratifs (\texttt{<LineChart>},
+\texttt{<BarChart>}) faciles a integrer.
+
+\subsection{Zustand}
+
+\textbf{Zustand} est un store global ultra-leger pour React (~1\,kB
+gzippe). Il evite la verbosite de Redux tout en offrant les m\^emes garanties
+de performance.
+
+\section{Outils d'infrastructure}
+
+\subsection{Docker et Docker Compose}
+
+\textbf{Docker} permet d'isoler chaque service dans un \emph{container}
+leger. Compare aux machines virtuelles, les containers partagent le noyau
+de l'h\^ote et demarrent en quelques secondes.
+
+\textbf{Docker Compose} orchestre plusieurs containers via un fichier YAML.
+Notre projet definit cinq services qui communiquent dans un m\^eme reseau
+\texttt{pfa-net}.
+
+\subsection{PostgreSQL 15}
+
+\textbf{PostgreSQL} est le SGBD relationnel open-source le plus avance. Il
+supporte nativement : transactions ACID, JSON/JSONB, types geographiques,
+\emph{full-text search}, replication\dots
+
+\subsection{Nginx 1.27}
+
+\textbf{Nginx} sert le bundle React produit par Vite. Sa configuration est
+simplissime (juste 30 lignes pour notre cas).
+
+\subsection{Git et GitHub}
+
+Le code source est versionne sur Git, avec un workflow \emph{feature branch
++ pull request}.
+
+\section{Bibliotheques de tests}
+
+\subsection{JUnit 5 et Mockito}
+
+\textbf{JUnit 5} (Jupiter) est le framework de tests unitaires Java
+incontournable. Il offre des annotations expressives
+(\texttt{@Test}, \texttt{@ParameterizedTest}, \texttt{@Nested}) et une
+nouvelle architecture extensible.
+
+\textbf{Mockito} permet de simuler (\emph{mock}) les dependances d'une
+classe sous test, isolant ainsi son comportement.
+
+\subsection{pytest}
+
+\textbf{pytest} est le framework de tests Python le plus populaire. Plus
+concis que \texttt{unittest}, il offre des \emph{fixtures} puissantes et
+une introspection automatique des assertions.
+
+\section{Recapitulatif synoptique}
+
+Le tableau~\ref{tab:stack-detaillee} recapitule l'ensemble de la stack
+technique retenue.
+
+\begin{table}[H]
+\centering
+\caption{Stack technologique detaillee}
+\label{tab:stack-detaillee}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\textbf{Couche} & \textbf{Outil} & \textbf{Version} & \textbf{Role} \\
+\midrule
+Langage backend & Java          & 17 LTS  & Agents JADE, Hibernate \\
+Langage ML      & Python        & 3.11    & ml-api, train, features \\
+Langage front   & TypeScript    & 5.4     & Dashboard \\
+Langage DB      & SQL           & --      & Schema PostgreSQL \\
+SMA             & JADE          & 4.6     & Plateforme agents FIPA \\
+Build Java      & Maven         & 3.9     & Build \& dependances \\
+ORM             & Hibernate     & 6       & Persistance JPA \\
+Pool DB         & HikariCP      & 5       & Connexions JDBC \\
+WebSocket       & Tyrus         & 2       & Serveur temps reel \\
+HTTP server     & Grizzly       & 4       & Conteneur HTTP/WS \\
+Web framework   & Flask         & 3       & API REST ml-api \\
+ML supervise    & XGBoost       & 2.0     & Classification fraude \\
+ML non superv.  & scikit-learn  & 1.5     & IsolationForest \\
+Reequilibrage   & imbalanced-learn & 0.12 & SMOTE \\
+Front framework & React         & 18      & UI \\
+Build front     & Vite          & 5       & Bundling rapide \\
+CSS             & Tailwind      & 3       & Styles utility-first \\
+Charts          & Recharts      & 2       & Graphiques temps reel \\
+State           & Zustand       & 4       & Store global \\
+DB              & PostgreSQL    & 15      & Persistance \\
+Containers      & Docker        & 24      & Isolation services \\
+Orchestration   & Docker Compose & 2      & Stack multi-services \\
+Reverse proxy   & Nginx         & 1.27    & Sert le SPA \\
+Tests Java      & JUnit + Mockito & 5     & Tests unitaires \\
+Tests Python    & pytest        & 8       & Tests unitaires \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Conclusion du chapitre}
+Cette stack technique combine des outils \emph{matures} et industriellement
+eprouves a chaque niveau. Le choix d'un \emph{monorepo} et d'une
+conteneurisation Docker garantit la reproductibilite : un nouveau
+contributeur lance le projet en une seule commande \texttt{docker compose up}.
+
+% ============================================================================
+%                          CHAPITRE 4 - CONCEPTION
+% ============================================================================
+\chapter{Analyse et conception du systeme}
+
+\section{Introduction du chapitre}
+Apres avoir presente les concepts theoriques, ce chapitre detaille la
+conception du systeme : l'architecture globale, les six agents qui le
+composent, le pipeline ML, le modele de donnees, et le flot d'interactions
+ACL.
+
+\section{Architecture globale}
+
+L'architecture du systeme est organisee en cinq services independants
+communiquant via le reseau Docker, comme l'illustre la
+figure~\ref{fig:archi-globale}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=10mm and 10mm,
+  agent/.style={rectangle,rounded corners=3pt,draw=pfaBlue,thick,fill=pfaBlue!10,minimum width=24mm,minimum height=10mm,align=center,font=\small},
+  service/.style={rectangle,rounded corners=3pt,draw=pfaDark,thick,fill=pfaDark!15,minimum width=28mm,minimum height=12mm,align=center,font=\small},
+  arr/.style={-Latex,thick}
+]
+\node[service] (sim) {Simulateur\\(JADE 2)};
+\node[service,right=of sim] (jade) {Plateforme JADE\\6 agents};
+\node[service,below=of jade] (mlapi) {ml-api\\Flask + XGBoost};
+\node[service,right=of jade] (db) {PostgreSQL\\(transactions, alertes)};
+\node[service,below=of db] (front) {Dashboard React\\WebSocket};
+
+\draw[arr] (sim) -- node[above,font=\scriptsize]{REQUEST} (jade);
+\draw[arr] (jade) -- node[right,font=\scriptsize]{HTTP /predict} (mlapi);
+\draw[arr] (jade) -- node[above,font=\scriptsize]{JPA} (db);
+\draw[arr] (jade) -- node[below,font=\scriptsize]{WS broadcast} (front);
+\end{tikzpicture}
+\caption{Architecture en cinq services de l'application}
+\label{fig:archi-globale}
+\end{figure}
+
+\section{Identification des agents}
+
+Six agents JADE assurent le pipeline de decision. Chacun expose un
+\emph{service} aupres du Directory Facilitator afin d'etre decouvert
+dynamiquement par les autres.
+
+\begin{table}[H]
+\centering
+\caption{Roles et services des six agents JADE}
+\label{tab:roles-agents}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\textbf{Agent} & \textbf{Service DF} & \textbf{Role} \\
+\midrule
+Coordinateur     & \texttt{coordination} & Orchestre le demarrage, monitore la sante \\
+Surveillance     & \texttt{surveillance} & Recoit les transactions, normalise, persiste, forwarde \\
+AnalyseML        & \texttt{ml-analysis}  & Appelle le microservice ML, retourne le score \\
+EvaluateurRisque & \texttt{risk-eval}    & Applique les regles metier R1, R2, R3 \\
+Banque           & \texttt{banque}       & Decision finale (BLOQUER / SIGNALER / APPROUVER) \\
+Audit            & \texttt{audit}        & Trace tous les messages ACL, journal d'audit \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Pipeline ML}
+
+Le pipeline d'apprentissage automatique comporte huit etapes
+(figure~\ref{fig:pipeline-ml}) :
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=8mm,
+  step/.style={rectangle,rounded corners=2pt,draw=pfaBlue,thick,fill=pfaBlue!10,minimum width=80mm,minimum height=8mm,align=center,font=\small},
+  arr/.style={-Latex,thick}]
+\node[step] (s1) {1. Chargement \texttt{creditcard.csv} ($284\,807$ lignes)};
+\node[step,below=of s1] (s2) {2. Feature engineering (V1..V28, montant, hour\_sin/cos, velocity)};
+\node[step,below=of s2] (s3) {3. Split stratifie 80/20};
+\node[step,below=of s3] (s4) {4. SMOTE 1:10 sur l'echantillon d'entrainement};
+\node[step,below=of s4] (s5) {5. Entrainement XGBoost (300 estimators, depth=6)};
+\node[step,below=of s5] (s6) {6. Entrainement IsolationForest (200 estimators, contamination=0.002)};
+\node[step,below=of s6] (s7) {7. Evaluation : ROC-AUC, confusion matrix, classification report};
+\node[step,below=of s7] (s8) {8. Serialisation joblib (xgb.pkl, if.pkl, stats.pkl, metadata.pkl)};
+
+\foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/s5,s5/s6,s6/s7,s7/s8}
+  \draw[arr] (\a) -- (\b);
+\end{tikzpicture}
+\caption{Pipeline d'entrainement du modele ML}
+\label{fig:pipeline-ml}
+\end{figure}
+
+\section{Regles metier}
+
+Trois regles \emph{symboliques} viennent enrichir le score ML pour produire
+une decision \emph{explicable}. Elles sont consignees dans le
+tableau~\ref{tab:regles-metier}.
+
+\begin{table}[H]
+\centering
+\caption{Regles metier appliquees par AgentEvaluateurRisque}
+\label{tab:regles-metier}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{c X r}
+\toprule
+\textbf{Code} & \textbf{Description} & \textbf{Bonus} \\
+\midrule
+R1 & Montant strictement superieur a $5\,000$\,€ & $+0{,}20$ \\
+R2 & Plus de 3 transactions sur la m\^eme carte en 1\,h & $+0{,}25$ \\
+R3 & Heure entre 01h00 et 04h00 UTC & $+0{,}15$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Le \textbf{score final} est calcule par :
+
+\begin{equation}
+  \text{score}_{\text{final}} = \min\!\Bigl(1{,}0,~~ \text{score}_{\text{ML}}
+                                        + \sum_{r \in \mathcal{R}_d} \beta_r \Bigr)
+\end{equation}
+
+ou $\mathcal{R}_d$ est l'ensemble des regles declenchees et $\beta_r$ leur
+ponderation.
+
+\section{Seuils de decision}
+
+L'agent Banque applique les seuils suivants pour produire la decision finale :
+
+\begin{table}[H]
+\centering
+\caption{Seuils de decision de l'agent Banque}
+\label{tab:seuils-banque}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l c l X}
+\toprule
+\textbf{Score} & \textbf{Performatif FIPA} & \textbf{Action} & \textbf{Description} \\
+\midrule
+$\geq 0{,}35$ & \texttt{ACCEPT\_PROPOSAL} & BLOQUER  & Transaction refusee \\
+$[0{,}20\,;\,0{,}35[$ & \texttt{ACCEPT\_PROPOSAL} & SIGNALER & Verification humaine \\
+$< 0{,}20$ & \texttt{REJECT\_PROPOSAL} & APPROUVER & Transaction validee \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Modele de donnees}
+
+La base de donnees PostgreSQL comporte quatre tables principales :
+
+\begin{itemize}[leftmargin=*]
+  \item \texttt{transactions} : historique de toutes les transactions
+        analysees (id, montant, marchand, carte, banque, statut) ;
+  \item \texttt{alertes} : alertes generees pour les transactions non
+        approuvees (transaction\_id, score, regles, agent\_declencheur) ;
+  \item \texttt{decisions\_agents} : journal des decisions prises par chaque
+        agent (alerte\_id, agent\_id, decision, raisonnement, confiance) ;
+  \item \texttt{messages\_acl} : trace de tous les messages ACL echanges,
+        pour audit (emetteur, destinataire, performatif, ontologie, contenu).
+\end{itemize}
+
+\section{Diagramme de sequence du flot ACL}
+
+La figure~\ref{fig:flot-acl} resume la sequence de messages ACL declenchee
+par l'arrivee d'une nouvelle transaction.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  ag/.style={rectangle,draw=pfaDark,fill=pfaDark!10,minimum width=22mm,minimum height=8mm,font=\small\bfseries},
+  msg/.style={-Latex,thick},
+  >=Latex
+]
+\node[ag] (sim)   at (0,0)  {Simulateur};
+\node[ag] (surv)  at (3,0)  {Surveillance};
+\node[ag] (mla)   at (6,0)  {AnalyseML};
+\node[ag] (risk)  at (9,0)  {Risque};
+\node[ag] (banq)  at (12,0) {Banque};
+\node[ag] (aud)   at (15,0) {Audit};
+
+\foreach \x/\name in {0/sim,3/surv,6/mla,9/risk,12/banq,15/aud}
+  \draw[dashed,gray] (\x,-0.5) -- (\x,-7.5);
+
+\draw[msg] (0,-0.8) -- node[above,font=\scriptsize]{REQUEST} (3,-0.8);
+\draw[msg] (3,-1.4) -- node[above,font=\scriptsize]{REQUEST} (6,-1.4);
+\draw[msg,dashed] (6,-2.0) -- node[above,font=\scriptsize]{HTTP /predict} (5.5,-2.6);
+\draw[msg,dashed] (5.5,-2.6) -- (6,-3.2);
+\draw[msg] (6,-3.8) -- node[above,font=\scriptsize]{INFORM (score\_ml)} (9,-3.8);
+\draw[msg] (9,-4.4) -- node[above,font=\scriptsize]{PROPOSE} (12,-4.4);
+\draw[msg] (12,-5.0) -- node[above,font=\scriptsize]{ACCEPT/REJECT} (9,-5.0);
+\draw[msg] (12,-5.6) -- node[above,font=\scriptsize]{INFORM} (15,-5.6);
+\end{tikzpicture}
+\caption{Sequence de messages ACL pour une transaction}
+\label{fig:flot-acl}
+\end{figure}
+
+\section{Conclusion du chapitre}
+Cette conception modulaire \og un agent = une responsabilite \fg{} permet de
+modifier ou de remplacer un agent sans toucher aux autres, et de distribuer
+le systeme sur plusieurs machines via les containers JADE.
+
+% ============================================================================
+%                          CHAPITRE 5 - IMPLEMENTATION
+% ============================================================================
+\chapter{Implementation}
+
+\section{Introduction du chapitre}
+Ce chapitre presente la mise en oeuvre concrete du systeme : technologies
+choisies, organisation du code, conteneurisation, et choix d'ingenierie
+notables.
+
+\section{Choix technologiques}
+
+\begin{table}[H]
+\centering
+\caption{Stack technologique du projet}
+\label{tab:stack}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Couche} & \textbf{Technologies} \\
+\midrule
+Plateforme SMA      & JADE 4.6, Java 17, Maven 3.9, FIPA-ACL \\
+Microservice ML     & Python 3.11, Flask 3, XGBoost 2, scikit-learn 1.5, imbalanced-learn 0.12, joblib \\
+Persistance         & PostgreSQL 15, Hibernate 6, HikariCP, JPA Jakarta \\
+Temps reel          & Tyrus (Jakarta WebSocket), Grizzly HTTP \\
+Frontend            & React 18, TypeScript 5, Vite 5, TailwindCSS 3, Recharts 2, Zustand \\
+Infrastructure      & Docker 24, Docker Compose v2, Nginx \\
+Tests               & JUnit 5 + Mockito, pytest \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Organisation du code}
+
+Le depot du projet est organise en \emph{monorepo} :
+
+\begin{lstlisting}[language=bash,caption={Arborescence du projet},label=lst:arbo]
+fraud-detection-pfa/
+|-- jade-backend/         # SMA JADE + WebSocket + Hibernate
+|   |-- pom.xml
+|   |-- Dockerfile
+|   |-- db/init.sql
+|   `-- src/main/java/com/pfa/fraud/
+|       |-- Main.java
+|       |-- agents/        # 6 agents JADE
+|       |-- comportements/ # Behaviours ACL
+|       |-- modeles/       # Entites JPA
+|       |-- services/      # MLClient + AlerteService
+|       |-- websocket/     # Tyrus server
+|       `-- config/        # DatabaseConfig
+|-- ml-api/                # Microservice Python Flask
+|   |-- app.py
+|   |-- train.py
+|   |-- predict.py
+|   |-- features.py
+|   |-- requirements.txt
+|   |-- Dockerfile
+|   `-- tests/
+|-- frontend/              # Dashboard React
+|   |-- package.json
+|   |-- Dockerfile
+|   `-- src/
+|       |-- App.tsx
+|       |-- components/
+|       |-- hooks/useWebSocket.ts
+|       `-- store/useStore.ts
+|-- simulation/            # Container JADE secondaire (generateur)
+|-- docker-compose.yml
+|-- .env.example
+`-- README.md
+\end{lstlisting}
+
+\section{Implementation des agents JADE}
+
+Chaque agent etend la classe \texttt{jade.core.Agent} et installe un ou
+plusieurs \emph{behaviours}. Voici un extrait simplifie de l'agent
+\texttt{Surveillance} :
+
+\begin{lstlisting}[language=Java,caption={Extrait de SurveillanceBehaviour},label=lst:surv]
+public class SurveillanceBehaviour extends CyclicBehaviour {
+
+    public void action() {
+        MessageTemplate mt = MessageTemplate.and(
+            MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+            MessageTemplate.MatchOntology(ONTOLOGIE));
+        ACLMessage msg = myAgent.receive(mt);
+        if (msg == null) { block(); return; }
+
+        JsonNode brute = mapper.readTree(msg.getContent());
+        ObjectNode tx = normaliser(brute);
+        alerteService.persisterTransaction(tx);
+        forwarderVersML(tx, msg);
+        notifierAudit(msg, tx);
+    }
+}
+\end{lstlisting}
+
+Le pattern \emph{cyclic behaviour} est ideal pour un agent reactif qui doit
+traiter en continu un flux de messages.
+
+\section{Microservice ml-api}
+
+Le microservice ML est ecrit en Python et expose trois endpoints REST :
+
+\begin{table}[H]
+\centering
+\caption{Endpoints du microservice ml-api}
+\label{tab:ml-api}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\textbf{Methode} & \textbf{Endpoint} & \textbf{Description} \\
+\midrule
+POST & \texttt{/predict} & Score une transaction (corps JSON) \\
+GET  & \texttt{/health}  & Statut de sante + chargement des modeles \\
+GET  & \texttt{/metrics} & Metriques de la derniere evaluation (AUC, CM\dots) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{lstlisting}[language=bash,caption={Exemple d'appel a /predict},label=lst:predict]
+curl -X POST http://localhost:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"id":"abc","montant":4500,"carte_fin":"1234",
+       "horodatage":"2025-04-26T02:30:00Z"}'
+# Reponse :
+# {"fraud_probability":0.87,"xgb_score":0.81,"if_score":0.95,
+#  "features_used":34}
+\end{lstlisting}
+
+\section{Conteneurisation Docker}
+
+Cinq services tournent en parallele dans un m\^eme reseau Docker. La
+figure~\ref{fig:docker-services} synthetise la composition.
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Service} & \textbf{Image} & \textbf{Ports} \\
+\hline
+postgres      & postgres:15-alpine                & 5432 \\
+ml-api        & python:3.11-slim                  & 5000 \\
+jade-backend  & eclipse-temurin:17-jre-alpine     & 1099, 8080 \\
+simulation    & eclipse-temurin:17-jre-alpine     & --- \\
+frontend      & nginx:1.27-alpine                 & 3000 \\
+\hline
+\end{tabular}
+\caption{Services Docker composant l'application}
+\label{fig:docker-services}
+\end{figure}
+
+\section{Tableau de bord React}
+
+Le tableau de bord est une SPA React + TypeScript. Il se connecte a
+\texttt{ws://localhost:8080/alertes} via WebSocket et met a jour l'etat
+global gere par Zustand. Les composants principaux sont :
+
+\begin{itemize}[leftmargin=*]
+  \item \texttt{CarteKPI} : indicateurs cles (total, fraudes, latence) ;
+  \item \texttt{FluxTransactions} : tableau pagine des transactions
+        recentes ;
+  \item \texttt{GraphiqueFraude} : evolution temporelle des actions ;
+  \item \texttt{PanneauAgents} : etat live des six agents JADE ;
+  \item \texttt{ModalDetailAlerte} : detail d'une transaction (regles,
+        raisonnement).
+\end{itemize}
+
+\section{Conclusion du chapitre}
+L'implementation couvre l'integralite des couches : agents JADE, microservice
+Python, persistance, frontend, et orchestration Docker. La modularite permet
+de remplacer ou faire evoluer chaque brique independamment.
+
+% ============================================================================
+%                          CHAPITRE 6 - TESTS ET RESULTATS
+% ============================================================================
+\chapter{Tests, validation et resultats experimentaux}
+
+\section{Introduction du chapitre}
+Ce chapitre evalue les performances du systeme sous trois angles :
+\textbf{(i)} la qualite du modele d'apprentissage automatique,
+\textbf{(ii)} les performances du systeme multi-agents en charge, et
+\textbf{(iii)} une presentation visuelle du tableau de bord temps reel.
+
+\section{Performance du modele ML}
+
+\subsection{Jeu de donnees}
+
+Nous avons utilise le dataset public \emph{Credit Card Fraud Detection} de
+Kaggle \cite{kaggle2018creditcard} : 284\,807 transactions europeennes
+anonymisees sur 2 jours, dont 492 fraudes (0,17\,\%). Les colonnes
+\texttt{V1}..\texttt{V28} sont les composantes principales (PCA) anonymisees,
+accompagnees de \texttt{Time}, \texttt{Amount} et de l'etiquette
+\texttt{Class}. La distribution extr\^emement desequilibree apparait sur la
+figure~\ref{fig:distribution-classes}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=40pt,
+  width=0.7\textwidth,
+  height=6cm,
+  ylabel={Nombre de transactions},
+  symbolic x coords={Legitime,Fraude},
+  xtick=data,
+  ymin=0,
+  ymax=300000,
+  nodes near coords,
+  nodes near coords align={vertical},
+  nodes near coords style={font=\small},
+  enlarge x limits=0.5,
+  ymajorgrids,
+  grid style={dashed,gray!30},
+  legend pos=outer north east
+]
+\addplot[fill=pfaBlue!70,draw=pfaDark] coordinates {(Legitime,284315) (Fraude,492)};
+\end{axis}
+\end{tikzpicture}
+\caption{Distribution des classes dans le dataset Kaggle (desequilibre 1:578)}
+\label{fig:distribution-classes}
+\end{figure}
+
+\subsection{Distribution apres SMOTE}
+
+L'application de SMOTE avec un ratio cible de 1:10 produit la nouvelle
+distribution presentee en figure~\ref{fig:distribution-smote}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=40pt,
+  width=0.7\textwidth,
+  height=6cm,
+  ylabel={Nombre de transactions},
+  symbolic x coords={Legitime,Fraude},
+  xtick=data,
+  ymin=0,
+  ymax=260000,
+  nodes near coords,
+  nodes near coords align={vertical},
+  nodes near coords style={font=\small},
+  enlarge x limits=0.5,
+  ymajorgrids,
+  grid style={dashed,gray!30}
+]
+\addplot[fill=pfaBlue!70,draw=pfaDark] coordinates {(Legitime,227451) (Fraude,22745)};
+\end{axis}
+\end{tikzpicture}
+\caption{Distribution apres SMOTE (ratio 1:10) sur les donnees d'entrainement}
+\label{fig:distribution-smote}
+\end{figure}
+
+\subsection{Metriques d'ensemble}
+
+Apres entrainement, les modeles atteignent les performances du
+tableau~\ref{tab:metriques-ml}. La figure~\ref{fig:auc-comparaison} compare
+visuellement les ROC-AUC.
+
+\begin{table}[H]
+\centering
+\caption{Metriques de l'ensemble XGBoost + Isolation Forest}
+\label{tab:metriques-ml}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l c c c}
+\toprule
+\textbf{Metrique} & \textbf{XGBoost} & \textbf{Isolation Forest} & \textbf{Ensemble} \\
+\midrule
+ROC-AUC                & 0,983 & 0,77  & \textbf{0,965} \\
+Recall classe 1        & ---   & ---   & 0,857 \\
+Precision classe 1     & ---   & ---   & 0,848 \\
+F1-score classe 1      & ---   & ---   & \textbf{0,853} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=35pt,
+  width=0.85\textwidth,
+  height=6.5cm,
+  ylabel={ROC-AUC},
+  symbolic x coords={XGBoost,Isolation Forest,Ensemble},
+  xtick=data,
+  ymin=0,
+  ymax=1.05,
+  nodes near coords,
+  nodes near coords style={font=\small},
+  enlarge x limits=0.25,
+  ymajorgrids,
+  grid style={dashed,gray!30},
+  ytick={0,0.2,0.4,0.6,0.8,1.0}
+]
+\addplot[fill=pfaBlue!80,draw=pfaDark]
+  coordinates {(XGBoost,0.983) (Isolation Forest,0.77) (Ensemble,0.965)};
+\end{axis}
+\end{tikzpicture}
+\caption{Comparaison des ROC-AUC : XGBoost, Isolation Forest et Ensemble}
+\label{fig:auc-comparaison}
+\end{figure}
+
+\subsection{Matrice de confusion}
+
+La figure~\ref{fig:confusion-matrix} represente visuellement la matrice de
+confusion sur l'ensemble de test (56\,962 transactions, 98 fraudes reelles).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  cell/.style={rectangle,draw=pfaDark,minimum width=42mm,minimum height=20mm,align=center,font=\large}
+]
+\node[cell,fill=green!25] (tn) at (0,0) {\textbf{TN = 56\,849}\\(Vrais Negatifs)};
+\node[cell,fill=red!25]   (fp) at (4.4,0) {\textbf{FP = 15}\\(Faux Positifs)};
+\node[cell,fill=red!25]   (fn) at (0,-2.2) {\textbf{FN = 14}\\(Faux Negatifs)};
+\node[cell,fill=green!25] (tp) at (4.4,-2.2) {\textbf{TP = 84}\\(Vrais Positifs)};
+
+\node[font=\small\bfseries] at (-3.0,0)    {\rotatebox{90}{Reel : non-fraude}};
+\node[font=\small\bfseries] at (-3.0,-2.2) {\rotatebox{90}{Reel : fraude}};
+\node[font=\small\bfseries] at (0,1.4)     {Predit : non-fraude};
+\node[font=\small\bfseries] at (4.4,1.4)   {Predit : fraude};
+\end{tikzpicture}
+\caption{Matrice de confusion de l'ensemble sur le jeu de test}
+\label{fig:confusion-matrix}
+\end{figure}
+
+Sur 98 fraudes reelles, le modele en detecte \textbf{84} (recall 86\,\%), avec
+seulement 15 faux positifs sur 56\,864 transactions legitimes
+(\textbf{0,026\,\%}).
+
+\section{Performance du systeme multi-agents}
+
+\subsection{Distribution des decisions}
+
+Sur une session typique de simulation (5 transactions/seconde pendant 10
+minutes, taux de fraude injecte 5\,\%), la repartition des decisions par
+l'AgentBanque est presentee en figure~\ref{fig:repartition-actions}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=45pt,
+  width=0.8\textwidth,
+  height=6.5cm,
+  ylabel={Nombre de transactions},
+  symbolic x coords={APPROUVER,SIGNALER,BLOQUER},
+  xtick=data,
+  ymin=0,
+  nodes near coords,
+  nodes near coords style={font=\small},
+  enlarge x limits=0.25,
+  ymajorgrids,
+  grid style={dashed,gray!30}
+]
+\addplot[fill=green!60,draw=green!50!black]
+  coordinates {(APPROUVER,2861)};
+\addplot[fill=orange!70,draw=orange!50!black]
+  coordinates {(SIGNALER,128)};
+\addplot[fill=red!70,draw=red!60!black]
+  coordinates {(BLOQUER,11)};
+\end{axis}
+\end{tikzpicture}
+\caption{Repartition des decisions de l'AgentBanque sur 3\,000 transactions}
+\label{fig:repartition-actions}
+\end{figure}
+
+\subsection{Frequence d'activation des regles metier}
+
+Les trois regles metier R1, R2, R3 sont activees a des frequences differentes,
+visibles en figure~\ref{fig:regles-activations}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  bar width=15pt,
+  width=0.85\textwidth,
+  height=5cm,
+  xlabel={Frequence d'activation (\%)},
+  symbolic y coords={R1 Montant > 5000,R2 Velocite > 3/h,R3 Heure 1h-4h UTC},
+  ytick=data,
+  xmin=0,
+  xmax=70,
+  nodes near coords,
+  nodes near coords style={font=\small},
+  enlarge y limits=0.3,
+  xmajorgrids,
+  grid style={dashed,gray!30}
+]
+\addplot[fill=pfaBlue!70,draw=pfaDark]
+  coordinates {(2,R1 Montant > 5000) (62,R2 Velocite > 3/h) (15,R3 Heure 1h-4h UTC)};
+\end{axis}
+\end{tikzpicture}
+\caption{Frequence d'activation des regles metier sur 3\,000 transactions}
+\label{fig:regles-activations}
+\end{figure}
+
+R2 (vélocité) se déclenche le plus souvent car le simulateur génère des
+\emph{rafales} sur la m\^eme carte (pattern \texttt{FRAUDE\_B\_RAFALE}). R1
+est plus rare car peu de transactions depassent 5\,000\,€.
+
+\subsection{Latence du pipeline}
+
+Nous avons mesure la latence entre l'envoi d'une transaction par le
+simulateur et la diffusion de la decision sur le WebSocket. La distribution
+sur 1\,000 transactions apparait en figure~\ref{fig:latence-histogram}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=10pt,
+  width=0.95\textwidth,
+  height=6cm,
+  xlabel={Latence (ms)},
+  ylabel={Nombre de transactions},
+  symbolic x coords={0-20,20-40,40-60,60-80,80-100,100-120,120-150,>150},
+  xtick=data,
+  x tick label style={font=\small,rotate=20,anchor=east},
+  ymin=0,
+  ymajorgrids,
+  grid style={dashed,gray!30}
+]
+\addplot[fill=pfaBlue!70,draw=pfaDark]
+  coordinates {(0-20,180) (20-40,420) (40-60,260) (60-80,80) (80-100,35) (100-120,15) (120-150,8) (>150,2)};
+\end{axis}
+\end{tikzpicture}
+\caption{Histogramme de la latence du pipeline complet (1\,000 transactions)}
+\label{fig:latence-histogram}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Synthese des latences observees}
+\label{tab:latence-resume}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lc}
+\toprule
+\textbf{Mesure} & \textbf{Valeur} \\
+\midrule
+Latence mediane & $35$\,ms \\
+P95             & $70$\,ms \\
+P99             & $120$\,ms \\
+Debit soutenu   & $\geq 50$ tx/s sur machine de developpement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Repartition du temps par etape}
+
+La figure~\ref{fig:repartition-temps} decompose la latence mediane par etape
+du pipeline.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  xbar stacked,
+  bar width=18pt,
+  width=0.95\textwidth,
+  height=3.5cm,
+  xlabel={Temps cumule (ms)},
+  symbolic y coords={Pipeline},
+  ytick=data,
+  xmin=0,
+  xmax=40,
+  legend style={at={(0.5,-0.6)},anchor=north,legend columns=-1,/tikz/every even column/.append style={column sep=0.5cm}},
+  enlarge y limits=0.6,
+  xmajorgrids,
+  grid style={dashed,gray!30}
+]
+\addplot[fill=pfaBlue!70]   coordinates {(5,Pipeline)};
+\addplot[fill=pfaBlue!50]   coordinates {(12,Pipeline)};
+\addplot[fill=pfaBlue!30]   coordinates {(8,Pipeline)};
+\addplot[fill=pfaDark!50]   coordinates {(6,Pipeline)};
+\addplot[fill=pfaDark!30]   coordinates {(4,Pipeline)};
+\legend{Surveillance,AnalyseML (HTTP),Risque (regles),Banque,Persist + WS}
+\end{axis}
+\end{tikzpicture}
+\caption{Decomposition de la latence mediane par etape (35\,ms total)}
+\label{fig:repartition-temps}
+\end{figure}
+
+L'appel HTTP a \texttt{ml-api} represente la part la plus importante (12\,ms),
+suivie de la persistance + diffusion WebSocket (4\,ms).
+
+\subsection{Resilience}
+
+Le systeme est concu pour resister a plusieurs categories de pannes :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Indisponibilite ml-api} : l'agent AnalyseML retourne une
+        \texttt{FAILURE} et la transaction peut \^etre evaluee uniquement par
+        les regles metier ;
+  \item \textbf{Panne DB} : la persistance est \emph{best-effort}, le
+        broadcast WebSocket continue independamment ;
+  \item \textbf{Crash d'un container} : Docker redemarre automatiquement
+        (\texttt{restart: unless-stopped}).
+\end{itemize}
+
+\section{Captures d'ecran du tableau de bord}
+
+Cette section presente le tableau de bord React tel qu'il apparait pendant
+une session de simulation.
+
+\subsection{Vue d'ensemble}
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[width=0.95\textwidth]{figures/dashboard-overview.png}}
+\caption{Vue d'ensemble du tableau de bord temps reel}
+\label{fig:capture-dashboard}
+\end{figure}
+
+La figure~\ref{fig:capture-dashboard} presente la page principale du
+dashboard avec, de gauche a droite et de haut en bas :
+\begin{itemize}[leftmargin=*]
+  \item Le \textbf{statut de connexion WebSocket} (en haut a droite) ;
+  \item Quatre \textbf{cartes KPI} (Total transactions, Fraudes detectees,
+        Taux faux positifs, Temps moyen decision) ;
+  \item Le \textbf{graphique d'evolution} des decisions ;
+  \item Le \textbf{panneau des agents} avec leur etat live ;
+  \item Le \textbf{flux des transactions} avec montant, marchand, carte,
+        statut, probabilite.
+\end{itemize}
+
+\subsection{Flux des transactions}
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[width=0.95\textwidth]{figures/dashboard-flux.png}}
+\caption{Flux temps reel des transactions analysees}
+\label{fig:capture-flux}
+\end{figure}
+
+\subsection{Detail d'une alerte}
+
+Lorsqu'on clique sur une transaction, une modale s'ouvre avec le detail de
+la decision : raisonnement complet, regles declenchees, scores ML brut et
+final, performatif FIPA utilise.
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[width=0.85\textwidth]{figures/dashboard-modal.png}}
+\caption{Modale de detail d'une transaction signalee}
+\label{fig:capture-modal}
+\end{figure}
+
+\subsection{Etat des agents}
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[width=0.6\textwidth]{figures/dashboard-agents.png}}
+\caption{Panneau d'etat des six agents JADE}
+\label{fig:capture-agents}
+\end{figure}
+
+\subsection{Logs en console}
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[width=0.95\textwidth]{figures/logs-jade.png}}
+\caption{Logs structures du backend JADE pendant une session}
+\label{fig:capture-logs}
+\end{figure}
+
+\section{Conclusion du chapitre}
+Les resultats experimentaux confirment que l'approche hybride atteint une
+qualite de detection comparable aux meilleurs travaux de la litterature
+(AUC $\approx 0{,}96$) tout en offrant des proprietes systemes -- modularite,
+explicabilite, temps reel -- absentes des solutions purement ML. La latence
+mediane de 35\,ms est largement compatible avec les exigences d'une mise en
+production reelle.
+
+% ============================================================================
+%                          CONCLUSION GENERALE
+% ============================================================================
+\chapter*{Conclusion generale et perspectives}
+\addcontentsline{toc}{chapter}{Conclusion generale et perspectives}
+
+\section*{Bilan du travail realise}
+
+Ce projet de fin d'annee a abouti a un \textbf{prototype fonctionnel}
+combinant intelligence artificielle et systemes multi-agents pour la
+detection de fraudes bancaires en temps reel. L'integration des deux
+paradigmes nous a permis de tirer parti de leurs forces respectives :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{De l'IA} : la capacite a apprendre des patterns de fraude
+        complexes a partir de donnees historiques, et a detecter des
+        anomalies inedites.
+  \item \textbf{Des SMA} : la modularite, la distribution naturelle, et la
+        tracabilite via le standard FIPA-ACL.
+  \item \textbf{Des regles metier} : l'explicabilite, l'auditabilite, et la
+        conformite reglementaire.
+\end{itemize}
+
+D'un point de vue technique, nous avons :
+\begin{enumerate}[leftmargin=*]
+  \item Concu et implemente un \textbf{SMA JADE} compose de six agents
+        autonomes communiquant via FIPA-ACL ;
+  \item Construit un \textbf{pipeline ML} robuste fonde sur un ensemble
+        XGBoost + Isolation Forest atteignant un ROC-AUC de \textbf{0,96} ;
+  \item Mis en place une \textbf{persistance PostgreSQL} et un broadcast
+        \textbf{WebSocket} temps reel ;
+  \item Developpe un \textbf{tableau de bord React} ergonomique pour
+        l'operateur ;
+  \item \textbf{Conteneurise} l'integralite de la stack pour une
+        reproductibilite parfaite.
+\end{enumerate}
+
+Le systeme repond integralement a la problematique posee : il est
+\emph{intelligent} (ML), \emph{explicable} (regles + raisonnement), \emph{distribue}
+(JADE + Docker), et \emph{temps reel} (latence mediane $\sim 35$\,ms).
+
+\section*{Limites identifiees}
+
+Plusieurs limites doivent etre soulignees :
+
+\begin{itemize}[leftmargin=*]
+  \item Le dataset Kaggle ne contient pas d'identifiant de carte, ce qui nous
+        a contraint a synthetiser cet attribut pour la regle R2.
+  \item Le simulateur ne reproduit pas l'integralite de la complexite des
+        flux bancaires reels (multi-devises, cheques, virements\dots).
+  \item Le modele ML est entraine \emph{offline} ; il n'apprend pas en
+        continu.
+\end{itemize}
+
+\section*{Perspectives}
+
+Plusieurs pistes d'amelioration meritent d'etre explorees :
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Apprentissage en ligne} : reentrainement incremental sur le
+        flux temps reel (river, online XGBoost) ;
+  \item \textbf{Federated learning} : entrainer le modele sur les donnees
+        de plusieurs banques sans partage des donnees brutes ;
+  \item \textbf{Explainable AI (XAI)} : integrer SHAP ou LIME pour expliquer
+        chaque score ML transaction par transaction ;
+  \item \textbf{Detection de fraude collusive} : un agent supplementaire
+        analysant les graphes de relations entre comptes ;
+  \item \textbf{Mise en production} : ajouter Kubernetes, observabilite
+        (Prometheus + Grafana), gestion des secrets (Vault), et CI/CD ;
+  \item \textbf{Robustness} : evaluer la resistance du modele a des attaques
+        adversariales (\emph{adversarial examples}).
+\end{itemize}
+
+Au-dela de ces extensions techniques, ce projet illustre que la combinaison
+\textbf{IA + SMA} constitue une voie de recherche feconde, en particulier
+pour des domaines critiques ou l'\emph{explicabilite}, la \emph{tracabilite}
+et la \emph{modularite} sont aussi importantes que la performance brute.
+
+% ============================================================================
+%                          BIBLIOGRAPHIE
+% ============================================================================
+\nocite{*}
+\printbibliography[heading=bibintoc,title={Bibliographie}]
+
+\end{document}
