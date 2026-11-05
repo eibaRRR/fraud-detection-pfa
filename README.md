@@ -1,3 +1,7 @@
+> 🇬🇧 **English:** Real-time bank fraud detection system combining a **JADE multi-agent platform** (FIPA-ACL compliant), an **ML ensemble** (XGBoost + Isolation Forest) served by a Flask microservice, and a **React dashboard** fed over WebSocket. Each transaction is APPROVED, FLAGGED, or BLOCKED based on the ML score plus business rules (amount, card velocity, risk hours). End-of-year project (PFA) by a team of 4 — Docker Compose setup included.
+
+---
+
 # PFA · Détection intelligente de fraude financière
 
 Système de détection de fraude bancaire en temps réel basé sur un
